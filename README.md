@@ -41,6 +41,7 @@ plaster, tile and drywall follow, each with its own validation.
 | `tremor_screen/features.py` | Tap detection and transparent acoustic features (dominant frequency, spectral centroid, low/high band energy ratio, decay time) |
 | `tremor_screen/cli.py` | Feature extraction and synthetic-reference scoring for WAV recordings |
 | `tremor_screen/calibration.py` | Per-site calibration: scores each spot against reference taps from sound areas on the same surface and phone, with a confidence score and abstention |
+| `tremor_screen/zone_map.py` | Draws a per-zone map (PNG) from a CSV of scores and abstentions |
 | `tremor_screen/model.py` | Nearest-centroid screening per zone with abstention: `flag_for_followup`, `no_flag` or `abstain` |
 | `tremor_screen/splits.py` | Grouped train/test splits so taps from one specimen never leak between sets |
 | `tremor_screen/synthetic.py` | A toy tap generator (sound vs. hollow) for demos and tests. Not measured data |
@@ -86,6 +87,29 @@ score and abstains. With fewer than three usable taps, it prints a `null`
 score and abstains. Every result also includes
 `"score_reference": "synthetic_taps_only"` and an `intended_use` message, so
 a saved result carries the same limits.
+
+## Draw a zone screening map
+
+Save one row per zone in a CSV. Use integer grid coordinates with one zone per
+position. Use a finite numeric score for each scored zone. Set `abstain` to
+`true` or `1` for an abstained zone and `false` or `0` for a scored zone.
+The score can be blank for abstained zones.
+
+```csv
+zone,x,y,score,abstain
+A1,0,0,0.2,false
+A2,1,0,,true
+B1,0,1,0.8,false
+```
+
+```sh
+python -m tremor_screen.zone_map zones.csv --png zones.png
+```
+
+The map colors scored zones using the score range in the CSV and hatches
+abstained zones. Coordinates increase to the right and up. To generate a map
+from Python, import `draw_zone_map` from `tremor_screen.zone_map` and pass
+the CSV path and PNG path.
 
 ## Design principles
 
