@@ -9,16 +9,18 @@ Hammer sounding is a century-old technique. It works, but it relies on one
 person's ear, is hard to teach and leaves no record. TremOR aims to make it
 measurable, repeatable and documented, using hardware inspectors already carry.
 
-> **Status: early research prototype.** No field validation or pilot has been
-> completed. Everything in this repository runs on synthetic data. TremOR is a
-> screening aid that suggests where to look; it never decides whether a
-> structure is safe, and it never replaces a qualified inspector.
+> **Status: early research prototype.** The demo and the scoring reference use
+> synthetic taps only. A score from any WAV, including one you record, is a
+> comparison with that synthetic reference. The printed JSON repeats the limit
+> as `"score_reference": "synthetic_taps_only"`. Use established inspection
+> methods for field decisions.
 
 ## What is in this repository
 
 | Path | What it does |
 | --- | --- |
 | `tremor_screen/features.py` | Tap detection and transparent acoustic features (dominant frequency, spectral centroid, low/high band energy ratio, decay time) |
+| `tremor_screen/cli.py` | Feature extraction and synthetic-reference scoring for WAV recordings |
 | `tremor_screen/model.py` | Nearest-centroid screening per zone with abstention: `flag_for_followup`, `no_flag` or `abstain` |
 | `tremor_screen/splits.py` | Grouped train/test splits so taps from one specimen never leak between sets |
 | `tremor_screen/synthetic.py` | A toy tap generator (sound vs. hollow) for demos and tests. Not measured data |
@@ -36,13 +38,39 @@ pytest -q
 python examples/demo.py
 ```
 
-The demo prints a decision per held-out zone. Because the data is synthetic,
-the numbers say nothing about real-world accuracy.
+The demo prints a decision per held-out synthetic zone.
+
+## Screen a WAV recording
+
+```sh
+python -m pip install .
+tremor-screen recording.wav
+```
+
+The command reads one mono 16-bit PCM WAV, sampled at 16 kHz or higher, as a
+single zone. It prints features and a signed score against a synthetic tap
+reference fitted when the command runs. That score is a workflow
+demonstration. Use established inspection methods for field decisions,
+including when the decision is `no_flag`.
+
+Space taps at least 150 ms apart and leave at least 60 ms after the last tap
+onset so the command can extract a full window.
+
+The JSON includes the four acoustic features per usable tap, the tap count,
+the score, and a decision. Positive scores favor the synthetic suspect
+reference. Negative scores favor the synthetic comparison reference. The
+decisions are `flag_for_followup`, `no_flag`, and `abstain`. With at least
+three usable taps and an absolute score below 0.5, the command prints the
+score and abstains. With fewer than three usable taps, it prints a `null`
+score and abstains. Every result also includes
+`"score_reference": "synthetic_taps_only"` and an `intended_use` message, so
+a saved result carries the same limits.
 
 ## Design principles
 
-- **Screening, not judgment.** Outputs are "look closer here" flags with an
-  explicit abstain option. No safe/unsafe, damage-type or severity claims.
+- **Screening workflow.** The score compares taps with a synthetic reference
+  and can flag a zone for follow-up or abstain. Use established inspection
+  methods for field decisions.
 - **Honest evaluation.** Splits are grouped by specimen; results are labelled
   by data source (synthetic today).
 - **Small and local.** Transparent features and small models that can run on a
