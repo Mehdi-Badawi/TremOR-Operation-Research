@@ -1,20 +1,35 @@
 # Status (November 2026)
 
-## Done
-- Literature review of hammer sounding, tap testing and low-cost sensing
-  methods.
-- Feature extraction, grouped evaluation and an abstaining classifier,
-  prototyped on synthetic data; this repository holds a clean public
-  reference version.
-- Direction set: concrete delamination first, phone microphone first, with
-  contact sensors and a reference striker bench as higher-fidelity options.
+**Stage: working prototype. The phone app is in development.**
+
+## Built and tested in this repository
+- Tap detection and transparent acoustic features.
+- Feature-based classifier with margin-based abstention.
+- Per-site calibration against reference taps from sound areas, with a
+  confidence score and abstention, tagged by material.
+- Grouped train/test splits by specimen or building.
+- `tremor-screen` command for WAV recordings.
 - Loader for one [openly licensed concrete impact-echo dataset](DATASETS.md).
+- CI running lint, tests and the demo on every pull request.
 
-## In progress
-- Phone capture and labelling app for tap recordings.
-- Audit of public concrete sounding and impact-echo audio datasets.
+## In development
+- Phone app for recording, material labelling and the per-spot map.
+- Small audio model (well under 10M parameters) fine-tuned from open audio
+  models.
+- Low-cost contact-sensor kit (four MEMS or piezoelectric sensors and a
+  microcontroller, under about $100 in parts).
 
-## Not done yet (no claims)
-- No recordings of our own on concrete specimens.
-- No field trial or pilot.
-- No accuracy figures on real structures.
+## Collaborators and partners
+- Purdue Bowen Laboratory (Lyles School of Civil and Construction
+  Engineering) shares internal data and instrumentation.
+- AIS Construction Services (Indianapolis): site survey of a damaged pre-1900
+  masonry building; plans to try TremOR on its sites.
+- Miyamoto International, Kathmandu: planned first field user.
+- Kathmandu University: planned data sharing and kit.
+- Phase 1 winner, Purdue ShahLab.AI "AI for Good" competition.
+
+## Open challenges
+- No open tap-sound dataset exists for brick, plaster or drywall, and open
+  concrete data is scattered.
+- Field sites where an engineer's findings can be compared with TremOR's flags.
+- Human-subjects review for data collection with volunteers.
