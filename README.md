@@ -70,6 +70,29 @@ score and abstains. Every result also includes
 `"score_reference": "synthetic_taps_only"` and an `intended_use` message, so
 a saved result carries the same limits.
 
+## Draw a zone screening map
+
+Save one row per zone in a CSV. Use integer grid coordinates with one zone per
+position. Use a finite numeric score for each scored zone. Set `abstain` to
+`true` or `1` for an abstained zone and `false` or `0` for a scored zone.
+The score can be blank for abstained zones.
+
+```csv
+zone,x,y,score,abstain
+A1,0,0,0.2,false
+A2,1,0,,true
+B1,0,1,0.8,false
+```
+
+```sh
+python -m tremor_screen.zone_map zones.csv --png zones.png
+```
+
+The map colors scored zones using the score range in the CSV and hatches
+abstained zones. Coordinates increase to the right and up. To generate a map
+from Python, import `draw_zone_map` from `tremor_screen.zone_map` and pass
+the CSV path and PNG path.
+
 ## Design principles
 
 - **Screening, not judgment.** Outputs are "look closer here" flags with an
