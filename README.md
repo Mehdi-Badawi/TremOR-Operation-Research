@@ -1,19 +1,38 @@
-# TremOR: low-cost AI screening of hammer-tap sounds
+# TremOR: hearing the damage we can't see
 
-TremOR is a research project building a low-cost screening aid for routine
-building-maintenance inspection in the United States. An inspector taps a
-surface (concrete first) with a hammer, a phone records the sound, and software
-aims to flag zones that sound "hollow" for a closer look with established methods.
+Building inspectors have found hidden damage for generations by tapping a
+surface and listening for a change in the sound. It takes years of practice,
+and once the inspection is over there is usually no recording anyone can go
+back to. TremOR is built around the hammer inspectors already carry and the
+phone already in their pocket: the phone records each tap, a small offline
+model compares each spot with nearby reference taps from sound areas, and
+spots that sound different are flagged on a map so the engineer can decide
+where to look next.
 
-Hammer sounding is a century-old technique. It works, but it relies on one
-person's ear, is hard to teach and leaves no record. TremOR aims to make it
-measurable, repeatable and documented, using hardware inspectors already carry.
+We start with fired-clay brick and mortar. Concrete garages and decks,
+plaster, tile and drywall follow, each with its own validation.
 
-> **Status: early research prototype.** The demo and the scoring reference use
-> synthetic taps only. A score from any WAV, including one you record, is a
-> comparison with that synthetic reference. The printed JSON repeats the limit
-> as `"score_reference": "synthetic_taps_only"`. Use established inspection
-> methods for field decisions.
+> **Status: working prototype; the phone app is in development.** The
+> transparent feature-based classifier with margin-based abstention, per-site
+> calibration and grouped evaluation are built and tested here. The bundled
+> demos use synthetic taps; the JSON from `tremor-screen` labels its scores
+> `"score_reference": "synthetic_taps_only"`.
+
+## How it works
+
+1. **Record.** The phone records each hammer tap and asks what the surface is
+   made of (`brick_masonry`, `mortar`, `concrete`, `plaster`, `tile`,
+   `drywall`, `other`).
+2. **Calibrate per site.** The inspector taps a few sound areas on the same
+   wall with the same phone. That local reference absorbs differences between
+   walls, materials and phones without a large central model.
+3. **Compare.** Each spot's taps are scored by their distance from the local
+   reference (`tremor_screen/calibration.py`).
+4. **Flag, with confidence.** Every result is `flag_for_followup`, `no_flag`
+   or `abstain`, with a confidence score. When the evidence is weak, the model
+   abstains instead of guessing.
+5. **Map.** Flags are placed on a map of the surface so the engineer has a
+   clear place to start. The engineer always makes the assessment.
 
 ## What is in this repository
 
@@ -21,6 +40,7 @@ measurable, repeatable and documented, using hardware inspectors already carry.
 | --- | --- |
 | `tremor_screen/features.py` | Tap detection and transparent acoustic features (dominant frequency, spectral centroid, low/high band energy ratio, decay time) |
 | `tremor_screen/cli.py` | Feature extraction and synthetic-reference scoring for WAV recordings |
+| `tremor_screen/calibration.py` | Per-site calibration: scores each spot against reference taps from sound areas on the same surface and phone, with a confidence score and abstention |
 | `tremor_screen/model.py` | Nearest-centroid screening per zone with abstention: `flag_for_followup`, `no_flag` or `abstain` |
 | `tremor_screen/splits.py` | Grouped train/test splits so taps from one specimen never leak between sets |
 | `tremor_screen/synthetic.py` | A toy tap generator (sound vs. hollow) for demos and tests. Not measured data |
@@ -69,15 +89,18 @@ a saved result carries the same limits.
 
 ## Design principles
 
-- **Flags for follow-up.** Outputs are "look closer here" flags with an
-  explicit abstain option. Today the score compares taps with a synthetic
-  reference only.
-- **Honest evaluation.** Splits are grouped by specimen; results are labelled
-  by data source (synthetic today).
-- **Small and local.** Transparent features and small models that can run on a
-  phone. No frontier-model API in the pipeline.
-- **Open where it helps the field.** We plan to publish evaluation protocols
-  and a consented tap-sound dataset as they mature.
+- **Small.** Transparent features and models well under 10 million
+  parameters, designed to run offline on a mid-range phone. Training runs on
+  CPUs. No frontier-model API at any step.
+- **Intentional.** Recordings stay on the phone unless the user chooses to
+  share them. No account, no tracking. Users label their own data and decide
+  whether it joins the open dataset. See [docs/DATA-GOVERNANCE.md](docs/DATA-GOVERNANCE.md).
+- **Honest evaluation.** Taps from the same specimen or building always stay
+  together when data is split (`tremor_screen/splits.py`), and we report how
+  often the model abstains. We publish where it struggles:
+  [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+- **The engineer decides.** TremOR adds a low-cost piece of evidence; it never
+  replaces the engineer's assessment.
 
 See [docs/STATUS.md](docs/STATUS.md) for what exists today and
 [docs/ROADMAP.md](docs/ROADMAP.md) for what comes next.
