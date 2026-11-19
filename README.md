@@ -42,6 +42,7 @@ plaster, tile and drywall follow, each with its own validation.
 | `tremor_screen/cli.py` | Feature extraction and synthetic-reference scoring for WAV recordings |
 | `tremor_screen/calibration.py` | Per-site calibration: scores each spot against reference taps from sound areas on the same surface and phone, with a confidence score and abstention |
 | `tremor_screen/zone_map.py` | Draws a per-zone map (PNG) from a CSV of scores and abstentions |
+| `tremor_screen/datasets.py` | Downloads and caches a [public concrete impact-echo dataset](docs/DATASETS.md) |
 | `tremor_screen/model.py` | Nearest-centroid screening per zone with abstention: `flag_for_followup`, `no_flag` or `abstain` |
 | `tremor_screen/splits.py` | Grouped train/test splits so taps from one specimen never leak between sets |
 | `tremor_screen/synthetic.py` | A toy tap generator (sound vs. hollow) for demos and tests. Not measured data |

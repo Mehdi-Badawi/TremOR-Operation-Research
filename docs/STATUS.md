@@ -9,6 +9,7 @@
   confidence score and abstention, tagged by material.
 - Grouped train/test splits by specimen or building.
 - `tremor-screen` command for WAV recordings.
+- Loader for one [openly licensed concrete impact-echo dataset](DATASETS.md).
 - CI running lint, tests and the demo on every pull request.
 
 ## In development
