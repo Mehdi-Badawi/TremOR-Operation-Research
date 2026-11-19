@@ -9,10 +9,7 @@ Hammer sounding is a century-old technique. It works, but it relies on one
 person's ear, is hard to teach and leaves no record. TremOR aims to make it
 measurable, repeatable and documented, using hardware inspectors already carry.
 
-> **Status: early research prototype.** No field validation or pilot has been
-> completed. TremOR is a screening aid that suggests where to look; it never
-> decides whether a structure is safe, and it never replaces a qualified
-> inspector. The demo and the scoring reference use
+> **Status: early research prototype.** The demo and the scoring reference use
 > synthetic taps only. A score from any WAV, including one you record, is a
 > comparison with that synthetic reference. The printed JSON repeats the limit
 > as `"score_reference": "synthetic_taps_only"`. Use established inspection
@@ -72,9 +69,9 @@ a saved result carries the same limits.
 
 ## Design principles
 
-- **Screening, not judgment.** Outputs are "look closer here" flags with an
-  explicit abstain option. No safe/unsafe, damage-type or severity claims.
-  Today the score compares taps with a synthetic reference only.
+- **Flags for follow-up.** Outputs are "look closer here" flags with an
+  explicit abstain option. Today the score compares taps with a synthetic
+  reference only.
 - **Honest evaluation.** Splits are grouped by specimen; results are labelled
   by data source (synthetic today).
 - **Small and local.** Transparent features and small models that can run on a
