@@ -21,9 +21,3 @@ a verified cached archive offline. If the archive is missing or fails the
 checksum, the loader fetches the version 1 file listing and downloads the archive.
 The cache is under `$XDG_CACHE_HOME/tremor-screen`, or
 `~/.cache/tremor-screen` if no absolute cache directory is configured.
-
-No field validation or pilot has been completed.
-
-- **Screening, not judgment.** Outputs are "look closer here" flags with an
-  explicit abstain option. No safe/unsafe, damage-type or severity claims.
-  Today the score compares taps with a synthetic reference only.
