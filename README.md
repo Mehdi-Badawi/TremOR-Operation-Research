@@ -55,6 +55,4 @@ See [docs/STATUS.md](docs/STATUS.md) for what exists today and
 
 ## Licence
 
-Copyright © 2026 Mehdi Badawi. All rights reserved for now; an open licence
-will be chosen and added. Until then, you may view and run the code to
-evaluate the project; any other use needs written permission (see LICENSE).
+Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
