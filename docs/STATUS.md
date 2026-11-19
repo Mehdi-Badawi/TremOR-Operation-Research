@@ -8,6 +8,7 @@
   reference version.
 - Direction set: concrete delamination first, phone microphone first, with
   contact sensors and a reference striker bench as higher-fidelity options.
+- Loader for one [openly licensed concrete impact-echo dataset](DATASETS.md).
 
 ## In progress
 - Phone capture and labelling app for tap recordings.

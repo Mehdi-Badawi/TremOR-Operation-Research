@@ -27,6 +27,7 @@ measurable, repeatable and documented, using hardware inspectors already carry.
 | `tremor_screen/model.py` | Nearest-centroid screening per zone with abstention: `flag_for_followup`, `no_flag` or `abstain` |
 | `tremor_screen/splits.py` | Grouped train/test splits so taps from one specimen never leak between sets |
 | `tremor_screen/synthetic.py` | A toy tap generator (sound vs. hollow) for demos and tests. Not measured data |
+| `tremor_screen/datasets.py` | Downloads and caches the [public concrete impact-echo dataset](docs/DATASETS.md) |
 | `examples/demo.py` | End-to-end pipeline: recording → taps → features → grouped split → zone decisions |
 | `tests/` | Unit tests, run in CI on every pull request |
 
